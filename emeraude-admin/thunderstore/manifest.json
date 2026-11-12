@@ -1,0 +1,9 @@
+{
+  "name": "EmeraudeAdmin",
+  "version_number": "1.2.0",
+  "website_url": "",
+  "description": "Dedicated server admin tools: per-player journal (positions, items gained/lost, deaths, saves) and admin console commands to give items and teleport players. French UI.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2360"
+  ]
+}
