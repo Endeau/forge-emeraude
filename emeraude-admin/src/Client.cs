@@ -124,7 +124,7 @@ namespace EmeraudeAdmin
                     ItemDrop.DropItem(data, n, p.transform.position + p.transform.forward + Vector3.up, Quaternion.identity);
                 }
             }
-            p.Message(MessageHud.MessageType.Center, $"Reçu : {amount} {prefab}");
+            p.Message(MessageHud.MessageType.Center, L.T($"Received: {amount} {prefab}", $"Reçu : {amount} {prefab}"));
         }
     }
 }

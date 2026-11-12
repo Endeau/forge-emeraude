@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0 — 2026-11-12
+- English and French: new setting `General.Language` (`English` by default, or `French`) for in-game messages and, on the server, the journal and the replies to admins.
+- Commands now have English names: `adm:players`, `adm:help`. The French names `adm:joueurs` and `adm:aide` still work.
+- Configuration descriptions in English.
+- Compatible with 1.2.0 players and servers (same network messages).
+
 ## 1.2.0 — 2026-11-12
 - Journal rotation on character save: when the server saves the world, each connected player's game saves its character and confirms it to the server, which then archives that player's journal (`.1.log`, `.2.log`, `.3.log`).
 - Settings in `emeraude.admin.cfg`: `PositionEverySeconds`, `SnapshotEveryMinutes`, `KeptSaves`.

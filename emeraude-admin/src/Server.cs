@@ -52,7 +52,7 @@ namespace EmeraudeAdmin
             }
             catch (Exception e)
             {
-                Debug.LogWarning($"[{Plugin.Name}] écriture du journal impossible : {e.Message}");
+                Debug.LogWarning($"[{Plugin.Name}] cannot write the journal: {e.Message}");
             }
         }
 
@@ -72,12 +72,12 @@ namespace EmeraudeAdmin
             }
             catch (Exception e)
             {
-                Debug.LogWarning($"[{Plugin.Name}] archivage du journal impossible : {e.Message}");
+                Debug.LogWarning($"[{Plugin.Name}] cannot archive the journal: {e.Message}");
             }
         }
 
         static string Describe(Dictionary<string, int> inv) =>
-            inv.Count == 0 ? "vide" : string.Join(", ", inv.OrderBy(kv => kv.Key).Select(kv => $"{kv.Key} ×{kv.Value}"));
+            inv.Count == 0 ? L.T("empty", "vide") : string.Join(", ", inv.OrderBy(kv => kv.Key).Select(kv => $"{kv.Key} ×{kv.Value}"));
 
         static string DescribeDelta(Dictionary<string, int> delta) =>
             string.Join(", ", delta.OrderBy(kv => kv.Key).Select(kv => (kv.Value > 0 ? "+" : "") + kv.Value + " " + kv.Key));
@@ -91,20 +91,20 @@ namespace EmeraudeAdmin
         {
             foreach (var peer in InGame())
                 if (online.Add(peer.m_uid))
-                    Journal(peer, peer.m_playerName, peer.m_refPos, "connexion");
+                    Journal(peer, peer.m_playerName, peer.m_refPos, L.T("connected", "connexion"));
 
             if (Time.time < nextPosition) return;
             nextPosition = Time.time + Plugin.PositionEverySeconds.Value;
             foreach (var peer in InGame())
-                Journal(peer, peer.m_playerName, peer.m_refPos, "position");
+                Journal(peer, peer.m_playerName, peer.m_refPos, L.T("position", "position"));
         }
 
         public static void OnDisconnect(ZNetPeer peer)
         {
             if (peer == null || !online.Remove(peer.m_uid)) return;
-            Journal(peer, peer.m_playerName, peer.m_refPos, "déconnexion");
+            Journal(peer, peer.m_playerName, peer.m_refPos, L.T("disconnected", "déconnexion"));
             if (inventories.TryGetValue(peer.m_uid, out var inv))
-                Journal(peer, peer.m_playerName, peer.m_refPos, "inventaire au départ : " + Describe(inv));
+                Journal(peer, peer.m_playerName, peer.m_refPos, L.T("inventory when leaving: ", "inventaire au départ : ") + Describe(inv));
             inventories.Remove(peer.m_uid);
         }
 
@@ -128,15 +128,16 @@ namespace EmeraudeAdmin
                     break;
                 case "sauvegarde":
                     inventories[sender] = items;
-                    Journal(peer, name, pos, "personnage sauvegardé, inventaire : " + Describe(items));
+                    Journal(peer, name, pos, L.T("character saved, inventory: ", "personnage sauvegardé, inventaire : ") + Describe(items));
                     Rotate(FileOf(peer, name));
                     break;
                 case "mort":
-                    Journal(peer, name, pos, "MORT, inventaire laissé dans la tombe : " + Describe(items));
+                    Journal(peer, name, pos, L.T("DIED, inventory left in the tombstone: ", "MORT, inventaire laissé dans la tombe : ") + Describe(items));
                     break;
                 default: // apparition, inventaire
                     inventories[sender] = items;
-                    Journal(peer, name, pos, kind + " : " + Describe(items));
+                    string label = kind == "apparition" ? L.T("spawned with", "apparition") : L.T("inventory", "inventaire");
+                    Journal(peer, name, pos, label + L.T(": ", " : ") + Describe(items));
                     break;
             }
         }
@@ -151,8 +152,8 @@ namespace EmeraudeAdmin
             var exact = peers.Where(p => p.m_playerName.Equals(name, StringComparison.OrdinalIgnoreCase)).ToList();
             var found = exact.Count > 0 ? exact : peers.Where(p => p.m_playerName.StartsWith(name, StringComparison.OrdinalIgnoreCase)).ToList();
             error = found.Count == 1 ? null
-                : found.Count == 0 ? $"Joueur « {name} » introuvable. En ligne : {string.Join(", ", peers.Select(p => p.m_playerName))}"
-                : $"« {name} » est ambigu : {string.Join(", ", found.Select(p => p.m_playerName))}";
+                : found.Count == 0 ? L.T($"Player \"{name}\" not found. Online: ", $"Joueur « {name} » introuvable. En ligne : ") + string.Join(", ", peers.Select(p => p.m_playerName))
+                : L.T($"\"{name}\" is ambiguous: ", $"« {name} » est ambigu : ") + string.Join(", ", found.Select(p => p.m_playerName));
             return found.Count == 1 ? found[0] : null;
         }
 
@@ -167,8 +168,8 @@ namespace EmeraudeAdmin
             string admin = local ? "hôte" : peer?.m_playerName ?? sender.ToString();
             if (!local && (peer == null || !ZNet.instance.IsAdmin(SteamId(peer))))
             {
-                Write("admin.log", $"REFUSÉ {admin} ({SteamId(peer)}) : {line}");
-                Reply(sender, "Tu n'es pas admin du serveur (adminlist.txt).");
+                Write("admin.log", L.T("REFUSED ", "REFUSÉ ") + $"{admin} ({SteamId(peer)}) : {line}");
+                Reply(sender, L.T("You are not an admin of this server (adminlist.txt).", "Tu n'es pas admin du serveur (adminlist.txt)."));
                 return;
             }
             Write("admin.log", $"{admin} : {line}");
@@ -178,32 +179,32 @@ namespace EmeraudeAdmin
         static string Run(string[] a, string admin)
         {
             string error;
-            switch (a.Length > 0 ? a[0] : "")
+            switch (Commands.Canonical(a.Length > 0 ? a[0] : ""))
             {
-                case "joueurs":
+                case "players":
                 {
                     var peers = InGame().ToList();
-                    return peers.Count == 0 ? "Personne en jeu."
+                    return peers.Count == 0 ? L.T("Nobody in game.", "Personne en jeu.")
                         : string.Join("\n", peers.Select(p => $"{p.m_playerName} {Net.Pos(p.m_refPos)}"));
                 }
                 case "pos":
                 {
-                    if (a.Length < 2) return "Usage : adm:pos <joueur>";
+                    if (a.Length < 2) return L.T("Usage: adm:pos <player>", "Usage : adm:pos <joueur>");
                     var p = Find(a[1], out error);
-                    return p == null ? error : $"{p.m_playerName} est en {Net.Pos(p.m_refPos)}";
+                    return p == null ? error : p.m_playerName + L.T(" is at ", " est en ") + Net.Pos(p.m_refPos);
                 }
                 case "inv":
                 {
-                    if (a.Length < 2) return "Usage : adm:inv <joueur>";
+                    if (a.Length < 2) return L.T("Usage: adm:inv <player>", "Usage : adm:inv <joueur>");
                     var p = Find(a[1], out error);
                     if (p == null) return error;
                     return inventories.TryGetValue(p.m_uid, out var inv)
-                        ? $"{p.m_playerName} : {Describe(inv)}"
-                        : $"{p.m_playerName} : inventaire inconnu (Emeraude Admin absent chez lui ?)";
+                        ? p.m_playerName + L.T(": ", " : ") + Describe(inv)
+                        : p.m_playerName + L.T(": inventory unknown (Emeraude Admin not installed on their game?)", " : inventaire inconnu (Emeraude Admin absent chez lui ?)");
                 }
                 case "tp":
                 {
-                    if (a.Length != 3 && a.Length != 4) return "Usage : adm:tp <joueur> <joueur>  ou  adm:tp <joueur> <x> <z>";
+                    if (a.Length != 3 && a.Length != 4) return L.T("Usage: adm:tp <player> <player>  or  adm:tp <player> <x> <z>", "Usage : adm:tp <joueur> <joueur>  ou  adm:tp <joueur> <x> <z>");
                     var who = Find(a[1], out error);
                     if (who == null) return error;
                     Vector3 dest;
@@ -213,7 +214,7 @@ namespace EmeraudeAdmin
                     {
                         if (!float.TryParse(a[2], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) ||
                             !float.TryParse(a[3], NumberStyles.Float, CultureInfo.InvariantCulture, out float z))
-                            return "Coordonnées invalides : adm:tp <joueur> <x> <z>";
+                            return L.T("Invalid coordinates: adm:tp <player> <x> <z>", "Coordonnées invalides : adm:tp <joueur> <x> <z>");
                         // Comme la commande goto du jeu : hauteur arbitraire, le jeu pose le joueur au sol
                         dest = new Vector3(x, 30f, z);
                         exact = false;
@@ -228,22 +229,22 @@ namespace EmeraudeAdmin
                         where = to.m_playerName + " " + Net.Pos(to.m_refPos);
                     }
                     ZRoutedRpc.instance.InvokeRoutedRPC(who.m_uid, Net.Teleport, dest, exact);
-                    Journal(who, who.m_playerName, who.m_refPos, $"téléporté par {admin} vers {where}");
-                    return $"{who.m_playerName} téléporté vers {where}.";
+                    Journal(who, who.m_playerName, who.m_refPos, L.T($"teleported by {admin} to {where}", $"téléporté par {admin} vers {where}"));
+                    return who.m_playerName + L.T($" teleported to {where}.", $" téléporté vers {where}.");
                 }
                 case "give":
                 {
-                    if (a.Length < 3) return "Usage : adm:give <joueur> <objet> [quantité] [qualité]";
+                    if (a.Length < 3) return L.T("Usage: adm:give <player> <item> [amount] [quality]", "Usage : adm:give <joueur> <objet> [quantité] [qualité]");
                     var who = Find(a[1], out error);
                     if (who == null) return error;
                     var item = FindItem(a[2]);
-                    if (item == null) return $"Objet « {a[2]} » inconnu (nom anglais du prefab, ex. Copper, Tin, Bronze, Wood).";
+                    if (item == null) return L.T($"Unknown item \"{a[2]}\" (English prefab name, e.g. Copper, Tin, Bronze, Wood).", $"Objet « {a[2]} » inconnu (nom anglais du prefab, ex. Copper, Tin, Bronze, Wood).");
                     int amount = 1, quality = 1;
-                    if (a.Length > 3 && (!int.TryParse(a[3], out amount) || amount < 1 || amount > 9999)) return "Quantité invalide (1 à 9999).";
-                    if (a.Length > 4 && (!int.TryParse(a[4], out quality) || quality < 1 || quality > 10)) return "Qualité invalide (1 à 10).";
+                    if (a.Length > 3 && (!int.TryParse(a[3], out amount) || amount < 1 || amount > 9999)) return L.T("Invalid amount (1 to 9999).", "Quantité invalide (1 à 9999).");
+                    if (a.Length > 4 && (!int.TryParse(a[4], out quality) || quality < 1 || quality > 10)) return L.T("Invalid quality (1 to 10).", "Qualité invalide (1 à 10).");
                     ZRoutedRpc.instance.InvokeRoutedRPC(who.m_uid, Net.Give, item.name, amount, quality);
-                    Journal(who, who.m_playerName, who.m_refPos, $"reçoit de {admin} : {amount} {item.name}" + (quality > 1 ? $" (qualité {quality})" : ""));
-                    return $"{amount} {item.name} donné(s) à {who.m_playerName}.";
+                    Journal(who, who.m_playerName, who.m_refPos, L.T($"receives from {admin}: {amount} {item.name}", $"reçoit de {admin} : {amount} {item.name}") + (quality > 1 ? L.T($" (quality {quality})", $" (qualité {quality})") : ""));
+                    return L.T($"{amount} {item.name} given to {who.m_playerName}.", $"{amount} {item.name} donné(s) à {who.m_playerName}.");
                 }
                 default:
                     return Commands.Help;

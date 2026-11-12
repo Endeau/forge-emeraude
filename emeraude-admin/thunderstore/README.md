@@ -5,7 +5,7 @@ Admin tools for **Valheim dedicated servers**, made for a small private server a
 - a **journal per player**, written on the server: connections, positions, every item gained or lost, deaths, character saves;
 - **admin console commands** to give items to a player and teleport players, which vanilla Valheim no longer allows admins to do on a dedicated server.
 
-> The in-game texts and the journal are in **French**. *(Version française plus bas.)*
+> Available in **English** (default) and **French** — see [Configuration](#configuration). *(Version française plus bas.)*
 
 ## Why
 
@@ -32,8 +32,8 @@ No `devcommands` needed, no cheat flag on your character or on the items.
 
 | Command | Effect |
 |---|---|
-| `adm:aide` | Lists the commands |
-| `adm:joueurs` | Players in game and their positions |
+| `adm:help` | Lists the commands |
+| `adm:players` | Players in game and their positions |
 | `adm:pos <player>` | Position of a player |
 | `adm:inv <player>` | Current inventory of a player, as known by the server |
 | `adm:give <player> <item> [amount] [quality]` | Puts items straight into the player's inventory (dropped at their feet if full) |
@@ -42,7 +42,8 @@ No `devcommands` needed, no cheat flag on your character or on the items.
 
 - Player names are case-insensitive, and the start of a name is enough when unambiguous (`adm:inv clau`).
 - Items use the English prefab name: `Copper`, `Tin`, `Bronze`, `Wood`, `FineWood`, `Stone`, `IronScrap`, `SwordIron`, `ArmorBronzeChest`…
-- Every command is checked **by the server** against `adminlist.txt`. A non-admin gets *"Tu n'es pas admin du serveur"* and the attempt is logged.
+- Every command is checked **by the server** against `adminlist.txt`. A non-admin gets *"You are not an admin of this server"* and the attempt is logged.
+- French aliases also work: `adm:joueurs`, `adm:aide`.
 
 ## The journal
 
@@ -57,22 +58,22 @@ On the server, in `BepInEx/config/journal/`:
 Example:
 
 ```
-2026-11-12 14:21:21 | (73, 32, -399) | connexion
-2026-11-12 14:21:21 | (73, 32, -399) | apparition : ArmorTrollLeatherChest ×1, ArrowWood ×106, Coins ×186, …
-2026-11-12 14:21:36 | (74, 33, -415) | reçoit de Admin : 15 Copper
+2026-11-12 14:21:21 | (73, 32, -399) | connected
+2026-11-12 14:21:21 | (73, 32, -399) | spawned with: ArmorTrollLeatherChest ×1, ArrowWood ×106, Coins ×186, …
+2026-11-12 14:21:36 | (74, 33, -415) | receives from Admin: 15 Copper
 2026-11-12 14:21:36 | (74, 33, -415) | +15 Copper
 2026-11-12 14:22:02 | (79, 34, -412) | +5 Bronze, -10 Copper, -5 Tin
-2026-11-12 14:36:35 | (80, 34, -410) | personnage sauvegardé, inventaire : Bronze ×22, Coins ×186, …
+2026-11-12 14:36:35 | (80, 34, -410) | character saved, inventory: Bronze ×22, Coins ×186, …
 ```
 
 What is recorded:
 
-- **connexion / déconnexion**, with the inventory at departure;
+- **connections / disconnections**, with the inventory when leaving;
 - **position** every 60 seconds;
 - every **inventory change** (`+15 Copper`, `-2 Wood`), checked every second, with the position;
 - the **full inventory** every 5 minutes if it changed;
 - **deaths**, with what was left in the tombstone;
-- admin actions (`reçoit de…`, `téléporté par…`).
+- admin actions (`receives from…`, `teleported by…`).
 
 ### Rotation on save
 
@@ -86,6 +87,7 @@ If a player's game crashes before the save, their journal is **not** rotated: ev
 
 | Setting | Default | Side | Description |
 |---|---|---|---|
+| `General.Language` | `English` | both | `English` or `French`: in-game messages and, on the server, the journal and the replies to admins |
 | `Journal.PositionEverySeconds` | `60` | server | Interval between two logged positions |
 | `Journal.SnapshotEveryMinutes` | `5` | player | Interval between two full inventories sent (only if changed) |
 | `Journal.KeptSaves` | `3` | server | Number of archived save periods per player |
@@ -115,8 +117,8 @@ Outils d'admin pour **serveur dédié Valheim** :
 
 | Commande | Effet |
 |---|---|
-| `adm:aide` | Liste des commandes |
-| `adm:joueurs` | Joueurs en jeu et leur position |
+| `adm:aide` (ou `adm:help`) | Liste des commandes |
+| `adm:joueurs` (ou `adm:players`) | Joueurs en jeu et leur position |
 | `adm:pos <joueur>` | Position d'un joueur |
 | `adm:inv <joueur>` | Inventaire actuel d'un joueur |
 | `adm:give <joueur> <objet> [quantité] [qualité]` | Donne un objet directement dans l'inventaire (nom anglais du prefab : `Copper`, `Tin`, `Bronze`…) |
@@ -124,5 +126,7 @@ Outils d'admin pour **serveur dédié Valheim** :
 | `adm:tp <joueur> <x> <z>` | Téléporte un joueur à des coordonnées |
 
 Pas besoin de `devcommands` : ni le personnage ni les objets ne sont marqués « triche ».
+
+Le mod est en anglais par défaut. Pour le passer en français, mets `Language = French` dans `BepInEx/config/emeraude.admin.cfg` : sur le serveur pour le journal et les réponses aux admins, chez chaque joueur pour les messages affichés dans son jeu.
 
 Le journal est dans `BepInEx/config/journal/` sur le serveur. À chaque sauvegarde du monde, quand le jeu d'un joueur confirme que son personnage est bien enregistré, son journal est archivé (`.1.log`, `.2.log`, `.3.log`). Si son jeu plante avant, rien n'est archivé : on garde tout depuis sa dernière sauvegarde réussie, de quoi lui rendre ce qu'il a perdu.
