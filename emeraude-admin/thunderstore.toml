@@ -3,7 +3,7 @@ schemaVersion = "0.0.1"
 
 [package]
 # Nom de l'équipe Thunderstore qui publie le mod (à remplir, voir README.md)
-namespace = "A_REMPLIR"
+namespace = "Emeraude"
 name = "EmeraudeAdmin"
 versionNumber = "1.2.0"
 description = "Dedicated server admin tools: per-player journal (positions, items gained/lost, deaths, saves) and admin console commands to give items and teleport players. French UI."
