@@ -1,0 +1,10 @@
+{
+  "name": "EmeraudeSanctuaire",
+  "version_number": "1.1.0",
+  "website_url": "",
+  "description": "An emerald statue to place in your village: no monster spawns in its radius, monsters flee its area, and no raid starts on a player standing inside.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2360",
+    "ValheimModding-Jotunn-2.30.2"
+  ]
+}
