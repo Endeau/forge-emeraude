@@ -1,0 +1,10 @@
+{
+  "name": "EmeraudePrestige",
+  "version_number": "1.0.1",
+  "website_url": "",
+  "description": "Monsters ignore players whose armor is ahead of their biome: wear Iron and the Black Forest leaves you alone. Starred and raid monsters still attack.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2360",
+    "ValheimModding-Jotunn-2.30.2"
+  ]
+}
