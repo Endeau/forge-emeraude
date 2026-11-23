@@ -1,0 +1,10 @@
+{
+  "name": "EmeraudeCoffres",
+  "version_number": "1.4.0",
+  "website_url": "",
+  "description": "Craft From Containers fix: recipes that accept any one of several ingredients (like any fish at the food preparation table) now find that ingredient in nearby chests.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2360",
+    "ValheimPortMods-Craft_Build_Smelt_Cook_Fuel_Pull_From_Containers-4.1.0"
+  ]
+}
