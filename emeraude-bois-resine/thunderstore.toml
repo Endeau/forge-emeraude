@@ -1,0 +1,35 @@
+[config]
+schemaVersion = "0.0.1"
+
+[package]
+# Nom de l'équipe Thunderstore qui publie le mod (à remplir, voir README.md)
+namespace = "Emeraude"
+name = "EmeraudeBoisResine"
+versionNumber = "1.1.0"
+description = "A resined version of every plain wood building piece: same piece, twice the wood, and it no longer wears out in the rain or in water."
+websiteUrl = ""
+containsNsfwContent = false
+
+[package.dependencies]
+denikson-BepInExPack_Valheim = "5.4.2360"
+ValheimModding-Jotunn = "2.30.2"
+
+[build]
+icon = "./thunderstore/icon.png"
+readme = "./thunderstore/README.md"
+outdir = "./dist"
+
+[[build.copy]]
+source = "./src/bin/Release/netstandard2.1/EmeraudeBoisResine.dll"
+target = "plugins/EmeraudeBoisResine.dll"
+
+[[build.copy]]
+source = "./thunderstore/CHANGELOG.md"
+target = "CHANGELOG.md"
+
+[publish]
+repository = "https://thunderstore.io"
+communities = ["valheim"]
+
+[publish.categories]
+valheim = ["client-side", "server-side", "building", "tweaks"]

@@ -1,0 +1,6 @@
+lib/
+bin/
+obj/
+dist/
+tools/
+.env
