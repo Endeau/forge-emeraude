@@ -1,0 +1,9 @@
+{
+  "name": "EmeraudeRepos",
+  "version_number": "1.0.0",
+  "website_url": "",
+  "description": "The Rested buff lasts 1.5 times longer (configurable): base time and time per comfort level.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2360"
+  ]
+}
