@@ -15,6 +15,7 @@ namespace EmeraudeAdmin
         public const string Reply = "EA_Reply";       // (texte) réponse à une commande admin
         public const string Teleport = "EA_Teleport"; // (destination, position exacte ?)
         public const string Give = "EA_Give";         // (prefab, quantité, qualité)
+        public const string Do = "EA_Do";             // (action, argument) : take, skill, heal, repair, god, ghost, fly
 
         public static void Register()
         {
@@ -24,6 +25,7 @@ namespace EmeraudeAdmin
             rpc.Register<string>(Reply, Client.OnReply);
             rpc.Register<Vector3, bool>(Teleport, Client.OnTeleport);
             rpc.Register<string, int, int>(Give, Client.OnGive);
+            rpc.Register<string, string>(Do, Client.OnDo);
         }
 
         // Les ordres tp/give/réponses ne sont acceptés que s'ils viennent du serveur.

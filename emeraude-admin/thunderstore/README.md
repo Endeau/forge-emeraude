@@ -39,11 +39,28 @@ No `devcommands` needed, no cheat flag on your character or on the items.
 | `adm:give <player> <item> [amount] [quality]` | Puts items straight into the player's inventory (dropped at their feet if full) |
 | `adm:tp <player> <player>` | Teleports the first player next to the second |
 | `adm:tp <player> <x> <z>` | Teleports a player to coordinates (placed on the ground) |
+| `adm:portal` | Lists the portals and their positions |
+| `adm:portal <player> <portal name>` | Teleports a player in front of a portal (of two linked portals, the farthest from the player) |
+| `adm:tomb <player> [number]` | Lists a player's tombstones (online or not), or teleports the player to one of them |
+| `adm:take <player> <item> [amount]` | Removes items from a player's inventory |
+| `adm:skill <player> <skill> <level>` | Sets a skill level, 0 to 100 (`Swords`, `Axes`, `Run`, `Pickaxes`…) |
+| `adm:heal <player>` | Full health, stamina and eitr; removes burning, poison, frost, wet, cold, freezing, smoke, tar |
+| `adm:repair <player>` | Repairs every item the player carries or wears |
+| `adm:god [player] [on\|off]` | Invincible mode (yourself by default, toggles without on/off) |
+| `adm:ghost [player] [on\|off]` | Monsters ignore the player |
+| `adm:fly [player] [on\|off]` | Fly mode: jump to go up, crouch to go down |
+| `adm:journal <player> [lines]` | Last lines (20 by default) of a player's journal, online or not |
+| `adm:ores [player]` | Ore leaderboard, or a player's details ([Emeraude Minerais](https://thunderstore.io/c/valheim/p/Emeraude/EmeraudeMinerais/) on the server) |
+| `adm:say <message>` | Message in the middle of every player's screen |
+| `adm:day` / `adm:night` | Skips to the morning / the evening, like sleeping |
+| `adm:raid <player> <raid>` / `adm:raid stop` | Starts a raid near a player (without a name: lists the raids) / stops the current raid |
+| `adm:kick <player> [reason]` | Kicks a player, showing them the reason |
 
 - Player names are case-insensitive, and the start of a name is enough when unambiguous (`adm:inv clau`).
 - Items use the English prefab name: `Copper`, `Tin`, `Bronze`, `Wood`, `FineWood`, `Stone`, `IronScrap`, `SwordIron`, `ArmorBronzeChest`…
 - Every command is checked **by the server** against `adminlist.txt`. A non-admin gets *"You are not an admin of this server"* and the attempt is logged.
-- French aliases also work: `adm:joueurs`, `adm:aide`.
+- French aliases also work: `adm:joueurs`, `adm:aide`, `adm:portail`, `adm:tombe`, `adm:retirer`, `adm:competence`, `adm:soigner`, `adm:reparer`, `adm:dieu`, `adm:fantome`, `adm:vol`, `adm:minerais`, `adm:dire`, `adm:jour`, `adm:nuit`, `adm:expulser`.
+- `take`, `skill`, `heal`, `repair`, `god`, `ghost` and `fly` are applied by the player's own game: they need Emeraude Admin 1.4.0 there. God, ghost and fly modes end when the player leaves.
 
 ## The journal
 
@@ -124,6 +141,21 @@ Outils d'admin pour **serveur dédié Valheim** :
 | `adm:give <joueur> <objet> [quantité] [qualité]` | Donne un objet directement dans l'inventaire (nom anglais du prefab : `Copper`, `Tin`, `Bronze`…) |
 | `adm:tp <joueur> <joueur>` | Téléporte le premier joueur à côté du second |
 | `adm:tp <joueur> <x> <z>` | Téléporte un joueur à des coordonnées |
+| `adm:portail [joueur] [nom]` | Sans argument : liste des portails. Sinon téléporte le joueur devant le portail (des deux liés, le plus loin de lui) |
+| `adm:tombe <joueur> [numéro]` | Tombes d'un joueur (connecté ou non), ou le téléporte sur l'une d'elles |
+| `adm:retirer <joueur> <objet> [quantité]` | Retire un objet de l'inventaire |
+| `adm:competence <joueur> <compétence> <niveau>` | Règle une compétence de 0 à 100 (nom anglais : `Swords`, `Axes`, `Run`, `Pickaxes`…) |
+| `adm:soigner <joueur>` | Vie, endurance et eitr au maximum, retire brûlure, poison, givre, mouillé, froid, gel, fumée, goudron |
+| `adm:reparer <joueur>` | Répare tout ce que le joueur porte ou transporte |
+| `adm:dieu [joueur] [on\|off]` | Mode invincible (toi par défaut ; sans on/off, bascule) |
+| `adm:fantome [joueur] [on\|off]` | Les monstres ignorent le joueur |
+| `adm:vol [joueur] [on\|off]` | Mode vol : saut pour monter, accroupi pour descendre |
+| `adm:journal <joueur> [lignes]` | Dernières lignes du journal d'un joueur, connecté ou non |
+| `adm:minerais [joueur]` | Classement des minerais, ou le détail d'un joueur (Emeraude Minerais sur le serveur) |
+| `adm:dire <message>` | Message au centre de l'écran de tous les joueurs |
+| `adm:jour` / `adm:nuit` | Passe au matin / au soir, comme en dormant |
+| `adm:raid <joueur> <raid>` / `adm:raid stop` | Lance un raid près d'un joueur (sans nom : la liste) / arrête le raid en cours |
+| `adm:expulser <joueur> [raison]` | Expulse un joueur en lui affichant la raison |
 
 Pas besoin de `devcommands` : ni le personnage ni les objets ne sont marqués « triche ».
 

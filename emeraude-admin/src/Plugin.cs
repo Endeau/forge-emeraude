@@ -14,7 +14,7 @@ namespace EmeraudeAdmin
     {
         public const string Guid = "emeraude.admin";
         public const string Name = "Emeraude Admin";
-        public const string Version = "1.3.0";
+        public const string Version = "1.4.0";
 
         internal static ConfigEntry<Language> Lang;
         internal static ConfigEntry<int> PositionEverySeconds;

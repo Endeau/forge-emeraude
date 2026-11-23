@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using HarmonyLib;
 using UnityEngine;
 
 namespace EmeraudeAdmin
 {
-    // Côté joueur : suit l'inventaire et l'envoie au serveur, applique tp et give.
+    // Côté joueur : suit l'inventaire et l'envoie au serveur, applique les ordres des admins (tp, give, take…).
     static class Client
     {
         const float CheckEvery = 1f;
@@ -125,6 +127,77 @@ namespace EmeraudeAdmin
                 }
             }
             p.Message(MessageHud.MessageType.Center, L.T($"Received: {amount} {prefab}", $"Reçu : {amount} {prefab}"));
+        }
+
+        // Effets négatifs retirés par adm:heal
+        static readonly string[] BadEffects = { "Burning", "Poison", "Frost", "Lightning", "Wet", "Cold", "Freezing", "Smoked", "Tared" };
+
+        // Objets portés : avec Equipment and Quick Slots, ils ne sont plus dans l'inventaire principal.
+        static readonly string[] Worn = { "m_rightItem", "m_leftItem", "m_chestItem", "m_legItem", "m_ammoItem", "m_helmetItem", "m_shoulderItem", "m_utilityItem", "m_trinketItem" };
+
+        public static void OnDo(long sender, string action, string arg)
+        {
+            var p = Player.m_localPlayer;
+            if (!Net.FromServer(sender) || p == null) return;
+            var args = (arg ?? "").Split(' ');
+            string message;
+            switch (action)
+            {
+                case "take":
+                {
+                    var go = ObjectDB.instance.GetItemPrefab(args[0]);
+                    var drop = go != null ? go.GetComponent<ItemDrop>() : null;
+                    if (drop == null || args.Length < 2 || !int.TryParse(args[1], out int amount)) return;
+                    var inv = p.GetInventory();
+                    string name = drop.m_itemData.m_shared.m_name;
+                    int taken = Math.Min(amount, inv.CountItems(name));
+                    if (taken > 0) inv.RemoveItem(name, taken);
+                    message = L.T($"An admin took: {taken} {args[0]}", $"Retiré par un admin : {taken} {args[0]}");
+                    break;
+                }
+                case "skill":
+                {
+                    if (args.Length < 2 || !float.TryParse(args[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float level)) return;
+                    var skills = p.GetSkills();
+                    skills.CheatResetSkill(args[0]);
+                    if (level > 0f) skills.CheatRaiseSkill(args[0], level, false);
+                    message = L.T($"Skill {args[0]}: {level}", $"Compétence {args[0]} : {level}");
+                    break;
+                }
+                case "heal":
+                    p.Heal(p.GetMaxHealth(), false);
+                    p.AddStamina(p.GetMaxStamina());
+                    p.AddEitr(p.GetMaxEitr());
+                    foreach (var effect in BadEffects) p.GetSEMan().RemoveStatusEffect(effect.GetStableHashCode(), true);
+                    message = L.T("Healed by an admin", "Soigné par un admin");
+                    break;
+                case "repair":
+                {
+                    var items = p.GetInventory().GetAllItems().ToList();
+                    var t = Traverse.Create(p);
+                    items.AddRange(Worn.Select(f => t.Field(f).GetValue<ItemDrop.ItemData>()).Where(i => i != null));
+                    foreach (var item in items.Distinct().Where(i => i.m_shared.m_useDurability))
+                        item.m_durability = item.GetMaxDurability();
+                    message = L.T("Items repaired by an admin", "Objets réparés par un admin");
+                    break;
+                }
+                case "god":
+                case "ghost":
+                case "fly":
+                {
+                    bool now = action == "god" ? p.InGodMode() : action == "ghost" ? p.InGhostMode() : p.IsDebugFlying();
+                    bool want = arg == "on" || (arg != "off" && !now);
+                    if (action == "god") p.SetGodMode(want);
+                    else if (action == "ghost") p.SetGhostMode(want);
+                    else if (want != now) p.ToggleDebugFly();
+                    string mode = action == "god" ? L.T("God mode", "Mode dieu") : action == "ghost" ? L.T("Ghost mode", "Mode fantôme") : L.T("Fly mode", "Mode vol");
+                    message = mode + (want ? L.T(": on", " : activé") : L.T(": off", " : désactivé"));
+                    break;
+                }
+                default:
+                    return;
+            }
+            p.Message(MessageHud.MessageType.Center, message);
         }
     }
 }

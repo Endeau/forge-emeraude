@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.0 — 2026-11-23
+- New admin commands: `adm:portal` (teleport to a portal by name, or list them), `adm:take`, `adm:skill`, `adm:heal`, `adm:repair`, `adm:god`, `adm:ghost`, `adm:fly`, `adm:tomb`, `adm:journal`, `adm:ores`, `adm:say`, `adm:day`, `adm:night`, `adm:raid`, `adm:kick`. French aliases for most of them.
+- The host of a game started from the game (not a dedicated server) can now be targeted by the commands, like any other player.
+- Commands applied on a player's game (take, skill, heal, repair, god, ghost, fly) need Emeraude Admin 1.4.0 on that player's game.
+
 ## 1.3.0 — 2026-11-12
 - English and French: new setting `General.Language` (`English` by default, or `French`) for in-game messages and, on the server, the journal and the replies to admins.
 - Commands now have English names: `adm:players`, `adm:help`. The French names `adm:joueurs` and `adm:aide` still work.
