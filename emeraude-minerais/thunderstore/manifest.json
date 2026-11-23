@@ -1,0 +1,9 @@
+{
+  "name": "EmeraudeMinerais",
+  "version_number": "1.1.0",
+  "website_url": "",
+  "description": "Counts, per player, the ore put in smelters, the bars produced and the bars spent crafting or building. The server keeps the totals in a file for a leaderboard.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2360"
+  ]
+}
