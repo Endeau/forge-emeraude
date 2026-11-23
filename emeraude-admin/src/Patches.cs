@@ -43,4 +43,25 @@ namespace EmeraudeAdmin
             if (__instance == Player.m_localPlayer) Client.OnDeath(__instance);
         }
     }
+
+    [HarmonyPatch(typeof(Player), nameof(Player.OnSpawned))]
+    static class SpawnedPatch
+    {
+        static void Postfix(Player __instance)
+        {
+            if (__instance == Player.m_localPlayer) Client.Restore(__instance);
+        }
+    }
+
+    // adm:damage : chaque coup du joueur local (mêlée, zone, projectile) passe par SEMan.ModifyAttack.
+    [HarmonyPatch(typeof(SEMan), nameof(SEMan.ModifyAttack))]
+    static class DamagePatch
+    {
+        static readonly AccessTools.FieldRef<SEMan, Character> Owner = AccessTools.FieldRefAccess<SEMan, Character>("m_character");
+
+        static void Postfix(SEMan __instance, ref HitData hitData)
+        {
+            if (Client.DamageFactor != 1f && Owner(__instance) == Player.m_localPlayer) hitData.ApplyModifier(Client.DamageFactor);
+        }
+    }
 }

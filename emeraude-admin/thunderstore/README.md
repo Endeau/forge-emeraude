@@ -46,9 +46,10 @@ No `devcommands` needed, no cheat flag on your character or on the items.
 | `adm:skill <player> <skill> <level>` | Sets a skill level, 0 to 100 (`Swords`, `Axes`, `Run`, `Pickaxes`…) |
 | `adm:heal <player>` | Full health, stamina and eitr; removes burning, poison, frost, wet, cold, freezing, smoke, tar |
 | `adm:repair <player>` | Repairs every item the player carries or wears |
-| `adm:god [player] [on\|off]` | Invincible mode (yourself by default, toggles without on/off) |
-| `adm:ghost [player] [on\|off]` | Monsters ignore the player |
+| `adm:god [player] [on\|off]` | Invincible mode (yourself by default, toggles without on/off), kept after death and reconnection until off |
+| `adm:ghost [player] [on\|off]` | Monsters ignore the player, kept like god |
 | `adm:fly [player] [on\|off]` | Fly mode: jump to go up, crouch to go down |
+| `adm:damage [player] <multiplier>` | Multiplies the damage the player deals (1 = normal), until the game is closed |
 | `adm:journal <player> [lines]` | Last lines (20 by default) of a player's journal, online or not |
 | `adm:ores [player]` | Ore leaderboard, or a player's details ([Emeraude Minerais](https://thunderstore.io/c/valheim/p/Emeraude/EmeraudeMinerais/) on the server) |
 | `adm:say <message>` | Message in the middle of every player's screen |
@@ -59,7 +60,7 @@ No `devcommands` needed, no cheat flag on your character or on the items.
 - Player names are case-insensitive, and the start of a name is enough when unambiguous (`adm:inv clau`).
 - Items use the English prefab name: `Copper`, `Tin`, `Bronze`, `Wood`, `FineWood`, `Stone`, `IronScrap`, `SwordIron`, `ArmorBronzeChest`…
 - Every command is checked **by the server** against `adminlist.txt`. A non-admin gets *"You are not an admin of this server"* and the attempt is logged.
-- French aliases also work: `adm:joueurs`, `adm:aide`, `adm:portail`, `adm:tombe`, `adm:retirer`, `adm:competence`, `adm:soigner`, `adm:reparer`, `adm:dieu`, `adm:fantome`, `adm:vol`, `adm:minerais`, `adm:dire`, `adm:jour`, `adm:nuit`, `adm:expulser`.
+- French aliases also work: `adm:joueurs`, `adm:aide`, `adm:portail`, `adm:tombe`, `adm:retirer`, `adm:competence`, `adm:soigner`, `adm:reparer`, `adm:dieu`, `adm:fantome`, `adm:vol`, `adm:degats`, `adm:minerais`, `adm:dire`, `adm:jour`, `adm:nuit`, `adm:expulser`.
 - `take`, `skill`, `heal`, `repair`, `god`, `ghost` and `fly` are applied by the player's own game: they need Emeraude Admin 1.4.0 there. God, ghost and fly modes end when the player leaves.
 
 ## The journal
@@ -147,9 +148,10 @@ Outils d'admin pour **serveur dédié Valheim** :
 | `adm:competence <joueur> <compétence> <niveau>` | Règle une compétence de 0 à 100 (nom anglais : `Swords`, `Axes`, `Run`, `Pickaxes`…) |
 | `adm:soigner <joueur>` | Vie, endurance et eitr au maximum, retire brûlure, poison, givre, mouillé, froid, gel, fumée, goudron |
 | `adm:reparer <joueur>` | Répare tout ce que le joueur porte ou transporte |
-| `adm:dieu [joueur] [on\|off]` | Mode invincible (toi par défaut ; sans on/off, bascule) |
-| `adm:fantome [joueur] [on\|off]` | Les monstres ignorent le joueur |
+| `adm:dieu [joueur] [on\|off]` | Mode invincible (toi par défaut ; sans on/off, bascule), gardé après une mort ou une reconnexion jusqu'à off |
+| `adm:fantome [joueur] [on\|off]` | Les monstres ignorent le joueur, gardé comme dieu |
 | `adm:vol [joueur] [on\|off]` | Mode vol : saut pour monter, accroupi pour descendre |
+| `adm:degats [joueur] <multiplicateur>` | Multiplie les dégâts infligés par le joueur (1 = normal), jusqu'à la fermeture du jeu |
 | `adm:journal <joueur> [lignes]` | Dernières lignes du journal d'un joueur, connecté ou non |
 | `adm:minerais [joueur]` | Classement des minerais, ou le détail d'un joueur (Emeraude Minerais sur le serveur) |
 | `adm:dire <message>` | Message au centre de l'écran de tous les joueurs |

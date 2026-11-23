@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.2 — 2026-11-23
+- `adm:god` and `adm:ghost` now stay on after death and reconnection, until turned off (saved with the character).
+- New `adm:damage` (`adm:degats`) `[player] <multiplier>`: multiplies the damage dealt by a player (weapons, tools, arrows), until the game is closed.
+
+## 1.4.1 — 2026-11-23
+- `adm:ores` also shows ore mined (Emeraude Minerais 1.1.0).
+
 ## 1.4.0 — 2026-11-23
 - New admin commands: `adm:portal` (teleport to a portal by name, or list them), `adm:take`, `adm:skill`, `adm:heal`, `adm:repair`, `adm:god`, `adm:ghost`, `adm:fly`, `adm:tomb`, `adm:journal`, `adm:ores`, `adm:say`, `adm:day`, `adm:night`, `adm:raid`, `adm:kick`. French aliases for most of them.
 - The host of a game started from the game (not a dedicated server) can now be targeted by the commands, like any other player.

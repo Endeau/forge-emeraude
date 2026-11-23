@@ -11,6 +11,10 @@ namespace EmeraudeAdmin
     static class Client
     {
         const float CheckEvery = 1f;
+        const string KeepKey = "emeraude_admin.";
+
+        // Multiplicateur de dégâts du joueur local (adm:damage), jusqu'à la fermeture du jeu.
+        internal static float DamageFactor = 1f;
         static Player tracked;
         static Dictionary<string, int> last;
         static string lastSnapshot;
@@ -33,6 +37,15 @@ namespace EmeraudeAdmin
                 items[k] = n + item.m_stack;
             }
             return items;
+        }
+
+        // À l'apparition du joueur local : remet les modes dieu et fantôme activés par un admin.
+        internal static void Restore(Player p)
+        {
+            var on = new List<string>();
+            if (p.m_customData.ContainsKey(KeepKey + "god")) { p.SetGodMode(true); on.Add(L.T("God mode", "Mode dieu")); }
+            if (p.m_customData.ContainsKey(KeepKey + "ghost")) { p.SetGhostMode(true); on.Add(L.T("Ghost mode", "Mode fantôme")); }
+            if (on.Count > 0) p.Message(MessageHud.MessageType.Center, string.Join(", ", on) + L.T(": still on", " : toujours activé"));
         }
 
         static void Send(string kind, Player p, string data) =>
@@ -181,6 +194,11 @@ namespace EmeraudeAdmin
                     message = L.T("Items repaired by an admin", "Objets réparés par un admin");
                     break;
                 }
+                case "damage":
+                    if (!float.TryParse(arg, NumberStyles.Float, CultureInfo.InvariantCulture, out float factor) || factor <= 0f) return;
+                    DamageFactor = factor;
+                    message = L.T($"Damage x{arg}", $"Dégâts x{arg}");
+                    break;
                 case "god":
                 case "ghost":
                 case "fly":
@@ -190,6 +208,12 @@ namespace EmeraudeAdmin
                     if (action == "god") p.SetGodMode(want);
                     else if (action == "ghost") p.SetGhostMode(want);
                     else if (want != now) p.ToggleDebugFly();
+                    // Dieu et fantôme : gardés dans le personnage, remis à chaque apparition (mort, reconnexion).
+                    if (action != "fly")
+                    {
+                        if (want) p.m_customData[KeepKey + action] = "on";
+                        else p.m_customData.Remove(KeepKey + action);
+                    }
                     string mode = action == "god" ? L.T("God mode", "Mode dieu") : action == "ghost" ? L.T("Ghost mode", "Mode fantôme") : L.T("Fly mode", "Mode vol");
                     message = mode + (want ? L.T(": on", " : activé") : L.T(": off", " : désactivé"));
                     break;

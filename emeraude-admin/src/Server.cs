@@ -331,6 +331,29 @@ namespace EmeraudeAdmin
                     Journal(peer, name, peer?.m_refPos ?? Vector3.zero, L.T($"{cmd} mode {state} by {admin}", $"mode {cmd} {state} par {admin}"));
                     return L.T($"{cmd} mode ({state}) sent to {name}: the message on their screen confirms it.", $"Mode {cmd} ({state}) envoyé à {name} : le message sur son écran le confirme.");
                 }
+                case "damage":
+                {
+                    // [joueur] <multiplicateur> : sans joueur, c'est l'admin lui-même
+                    string usage = L.T("Usage: adm:damage [player] <multiplier>, 1 = normal", "Usage : adm:degats [joueur] <multiplicateur>, 1 = normal");
+                    string text = a.Length > 1 ? a[a.Length - 1].Replace(',', '.') : "";
+                    if (a.Length < 2 || a.Length > 3 || !float.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out float factor)
+                        || factor <= 0f || factor > MaxDamage)
+                        return usage + L.T($" (between 0 and {MaxDamage})", $" (entre 0 et {MaxDamage})");
+                    long uid = sender;
+                    string name = admin;
+                    ZNetPeer peer = ZNet.instance.GetPeer(sender);
+                    if (a.Length == 3)
+                    {
+                        peer = Find(a[1], out error);
+                        if (peer == null) return error;
+                        uid = peer.m_uid;
+                        name = peer.m_playerName;
+                    }
+                    string value = factor.ToString(CultureInfo.InvariantCulture);
+                    Do(uid, "damage", value);
+                    Journal(peer, name, peer?.m_refPos ?? Vector3.zero, L.T($"damage x{value} by {admin}", $"dégâts x{value} par {admin}"));
+                    return L.T($"Damage x{value} sent to {name}: the message on their screen confirms it.", $"Dégâts x{value} envoyés à {name} : le message sur son écran le confirme.");
+                }
                 case "tomb":
                     return Tomb(a, admin);
                 case "journal":
@@ -372,6 +395,8 @@ namespace EmeraudeAdmin
         // ZNet.Kick(string) cherche le joueur par identifiant de plateforme puis par nom : on lui donne directement le bon.
         static readonly Action<ZNet, ZNetPeer> KickPeer = AccessTools.MethodDelegate<Action<ZNet, ZNetPeer>>(
             AccessTools.Method(typeof(ZNet), "InternalKick", new[] { typeof(ZNetPeer) }));
+
+        const float MaxDamage = 1000f;
 
         static void Do(long uid, string action, string arg) => ZRoutedRpc.instance.InvokeRoutedRPC(uid, Net.Do, action, arg);
 
@@ -461,9 +486,9 @@ namespace EmeraudeAdmin
         static string Ores(string[] a)
         {
             string path = Path.Combine(Paths.ConfigPath, "emeraude-minerais", "classement.tsv");
-            if (!File.Exists(path)) return L.T("No ore count yet (Emeraude Minerais not installed, or nothing smelted).", "Aucun compte de minerais (Emeraude Minerais absent, ou rien fondu).");
+            if (!File.Exists(path)) return L.T("No ore count yet (Emeraude Minerais not installed, or nothing mined yet).", "Aucun compte de minerais (Emeraude Minerais absent, ou rien de miné).");
             var rows = File.ReadAllLines(path, Utf8).Skip(1).Select(l => l.Split('\t')).Where(c => c.Length == 5 && long.TryParse(c[4], out _)).ToList();
-            var stats = new[] { ("ore", L.T("Ore smelted", "Minerai mis au four")), ("produced", L.T("Bars produced", "Barres produites")), ("used", L.T("Bars used", "Barres utilisées")) };
+            var stats = new[] { ("mined", L.T("Ore mined", "Minerai récolté")), ("ore", L.T("Ore smelted", "Minerai mis au four")), ("produced", L.T("Bars produced", "Barres produites")), ("used", L.T("Bars used", "Barres utilisées")) };
             var sb = new StringBuilder();
             if (a.Length < 2)
             {
