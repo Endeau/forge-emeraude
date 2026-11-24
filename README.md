@@ -13,7 +13,7 @@ Chaque mod a son propre dépôt, avec son code et l'historique de ses versions :
 | [emeraude-sanctuaire](https://github.com/Endeau/emeraude-sanctuaire) | 1.1.0 | Statue émeraude : pas de monstres ni de raids dans son rayon | serveur + joueurs |
 | [emeraude-prestige](https://github.com/Endeau/emeraude-prestige) | 1.0.1 | Les monstres ignorent un joueur dont l'armure a un biome d'avance | serveur + joueurs |
 | [emeraude-coffres](https://github.com/Endeau/emeraude-coffres) | 1.4.0 | Complète Craft From Containers : ingrédients au choix, x10 / Tout, portée imposée par le serveur | serveur + joueurs |
-| [emeraude-bois-resine](https://github.com/Endeau/emeraude-bois-resine) | 1.1.0 | Pièces en bois résiné qui ne s'usent plus à la pluie | serveur + joueurs |
+| [emeraude-bois-resine](https://github.com/Endeau/emeraude-bois-resine) | 1.2.0 | Pièces en bois résiné qui ne s'usent plus à la pluie | serveur + joueurs |
 | [emeraude-montures](https://github.com/Endeau/emeraude-montures) | 1.1.0 | Réglages de Mount Up Restored : montures permises, vie, caméra | serveur + joueurs |
 | [emeraude-repos](https://github.com/Endeau/emeraude-repos) | 1.0.0 | Buff Reposé 1,5 fois plus long | joueurs |
 | [emeraude-minerais](https://github.com/Endeau/emeraude-minerais) | 1.1.0 | Compteurs de minerai par joueur pour le classement Discord | serveur + joueurs |
@@ -58,5 +58,6 @@ Un commit par version, dans le dépôt du mod. Toutes les sorties, dans l'ordre 
 | 23/11 | emeraude-deconstruction 1.2.0 : déconstruire bateaux et charrettes au marteau |
 | 23/11 | emeraude-construction 1.0.0 : Retour arrière remet l'accroche automatique |
 | 24/11 | emeraude-bucheron 1.0.0 : résine et graines garanties sur les grands arbres |
+| 24/11 | emeraude-bois-resine 1.2.0 : pentes, poutres en biais et toits de chaume résinés |
 
 Pour une nouvelle version : un commit `<mod> <version> : <ce qui change>` dans le dépôt du mod, avec le détail dans le corps du message, et une ligne de plus ici.
