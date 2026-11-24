@@ -1,0 +1,10 @@
+{
+  "name": "EmeraudeBucheron",
+  "version_number": "1.0.0",
+  "website_url": "",
+  "description": "Every large tree you fell always drops 1 to 3 resin and its seeds (beech seeds, birch seeds, acorns, fir and pine cones).",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2360",
+    "ValheimModding-Jotunn-2.30.2"
+  ]
+}
