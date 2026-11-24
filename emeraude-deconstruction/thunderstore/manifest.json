@@ -1,9 +1,0 @@
-{
-  "name": "EmeraudeDeconstruction",
-  "version_number": "1.2.0",
-  "website_url": "",
-  "description": "Deconstruct ships and carts with the hammer, like any other build piece: materials are returned. Blocked while someone is aboard, pulling the cart or using the cargo, or while the cargo is not empty.",
-  "dependencies": [
-    "denikson-BepInExPack_Valheim-5.4.2360"
-  ]
-}

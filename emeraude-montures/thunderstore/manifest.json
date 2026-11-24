@@ -1,9 +1,0 @@
-{
-  "name": "EmeraudeMontures",
-  "version_number": "1.1.0",
-  "website_url": "",
-  "description": "Mount Up Restored tweaks: wolves, boars and loxes can be ridden (not the asksvin), a tamed wolf or boar gets its rider's max health (never less than its own), and the camera stays steady while riding. French UI.",
-  "dependencies": [
-    "denikson-BepInExPack_Valheim-5.4.2360"
-  ]
-}
