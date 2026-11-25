@@ -9,7 +9,7 @@ Chaque mod a son propre dépôt, avec son code et l'historique de ses versions :
 
 | Mod | Version | Ce qu'il fait | Où l'installer |
 |---|---|---|---|
-| [emeraude-admin](https://github.com/Endeau/emeraude-admin) | 1.4.2 | Journal par joueur sur le serveur et commandes `adm:` (téléportation, objets, dieu, fantôme, vol…) | serveur + joueurs |
+| [emeraude-admin](https://github.com/Endeau/emeraude-admin) | 1.5.0 | Journal par joueur sur le serveur et commandes `adm:` (téléportation, objets, dieu, fantôme, vol…), aussi depuis le serveur | serveur + joueurs |
 | [emeraude-sanctuaire](https://github.com/Endeau/emeraude-sanctuaire) | 1.1.0 | Statue émeraude : pas de monstres ni de raids dans son rayon | serveur + joueurs |
 | [emeraude-prestige](https://github.com/Endeau/emeraude-prestige) | 1.0.1 | Les monstres ignorent un joueur dont l'armure a un biome d'avance | serveur + joueurs |
 | [emeraude-coffres](https://github.com/Endeau/emeraude-coffres) | 1.4.0 | Complète Craft From Containers : ingrédients au choix, x10 / Tout, portée imposée par le serveur | serveur + joueurs |
@@ -60,5 +60,6 @@ Un commit par version, dans le dépôt du mod. Toutes les sorties, dans l'ordre 
 | 24/11 | emeraude-bucheron 1.0.0 : résine et graines garanties sur les grands arbres |
 | 24/11 | emeraude-bois-resine 1.2.0 : pentes, poutres en biais et toits de chaume résinés |
 | 24/11 | emeraude-bois-resine 1.3.0 : pièces 67° résinées |
+| 25/11 | emeraude-admin 1.5.0 : commandes depuis le serveur, dons aux joueurs absents |
 
 Pour une nouvelle version : un commit `<mod> <version> : <ce qui change>` dans le dépôt du mod, avec le détail dans le corps du message, et une ligne de plus ici.
